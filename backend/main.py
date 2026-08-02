@@ -2,22 +2,23 @@ import os
 import os.path
 from fastapi import FastAPI, File, UploadFile, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from fastapi.staticfiles import StaticFiles
 import torch
 
 from model import get_pneumonet_model
 from predict import run_inference
 
 app = FastAPI(
-    title="PneumoVision - Pneumonia Detection API",
-    description="FastAPI Backend for CNN-based Chest X-Ray Pneumonia Classification",
+    title="PneumoVision - AI Chest X-Ray Pneumonia Diagnostic System",
+    description="Full-stack FastAPI + PyTorch CNN + React Web Interface",
     version="1.0.0"
 )
 
-# Enable CORS for React Vite Frontend
+# Enable CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows local dev frontend at http://localhost:5173
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -35,15 +36,6 @@ def load_model_weights():
     weights = WEIGHTS_PATH if os.path.exists(WEIGHTS_PATH) else None
     model = get_pneumonet_model(weights)
     print("PneumoNet PyTorch CNN model initialized successfully!")
-
-@app.get("/")
-def read_root():
-    return {
-        "status": "online",
-        "system": "PneumoVision Diagnostic API",
-        "model": "PneumoNet Custom CNN v1.0",
-        "documentation": "/docs"
-    }
 
 @app.get("/api/health")
 def health_check():
@@ -98,6 +90,27 @@ async def predict_xray(file: UploadFile = File(...)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error processing X-ray image: {str(e)}"
         )
+
+# Serve React Frontend Build Assets statically from 1 single Unified Service
+FRONTEND_DIST = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "frontend", "dist"))
+
+if os.path.exists(FRONTEND_DIST):
+    # Mount assets folder statically
+    assets_dir = os.path.join(FRONTEND_DIST, "assets")
+    if os.path.exists(assets_dir):
+        app.mount("/assets", StaticFiles(directory=assets_dir), name="assets")
+
+    @app.get("/")
+    async def serve_root():
+        return FileResponse(os.path.join(FRONTEND_DIST, "index.html"))
+
+    # Catch-all route to serve React index.html for Single-Page Application (SPA)
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        file_path = os.path.join(FRONTEND_DIST, full_path)
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            return FileResponse(file_path)
+        return FileResponse(os.path.join(FRONTEND_DIST, "index.html"))
 
 if __name__ == "__main__":
     import uvicorn
