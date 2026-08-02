@@ -96,7 +96,7 @@ export default function Analyzer({ serverHealthy, theme }) {
         const formData = new FormData();
         formData.append("file", imageFile);
 
-        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        const baseUrl = import.meta.env.VITE_API_URL ?? '';
         const response = await fetch(`${baseUrl}/api/predict`, {
           method: "POST",
           body: formData,

@@ -28,7 +28,7 @@ export default function App() {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+        const baseUrl = import.meta.env.VITE_API_URL ?? '';
         const res = await fetch(`${baseUrl}/api/health`, { signal: AbortSignal.timeout(3000) });
         if (res.ok) {
           const data = await res.json();
