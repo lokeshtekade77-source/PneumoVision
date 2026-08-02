@@ -1,12 +1,18 @@
 # PneumoVision: AI Chest X-Ray Pneumonia Diagnostic System
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Online-00F2FE?style=for-the-badge&logo=render&logoColor=white)](https://pneumovision-2hdy.onrender.com)
 [![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React_19-20232A?style=flat&logo=react&logoColor=61DAFB)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **PneumoVision** is an advanced medical AI platform that utilizes a custom Convolutional Neural Network (**PneumoNet**) to classify anterior-posterior chest radiography scans into **NORMAL** or **PNEUMONIA** with full confidence scoring, interactive 3D WebGL visualizations, and printable clinical diagnostic reports.
+
+---
+
+## 🌐 Live Website Application
+
+👉 **[Launch PneumoVision Live Web Application](https://pneumovision-2hdy.onrender.com)**
 
 ---
 
