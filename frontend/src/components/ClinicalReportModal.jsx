@@ -1,8 +1,10 @@
 import React from 'react';
 import { X, Printer, ShieldAlert, FileText, CheckCircle2, AlertTriangle } from 'lucide-react';
 
-export default function ClinicalReportModal({ result, imageSrc, _imageName, onClose, theme }) {
+export default function ClinicalReportModal({ result, imageSrc, selectedImage, imageName, onClose, theme }) {
   if (!result) return null;
+
+  const currentImage = selectedImage || imageSrc;
 
   const handlePrint = () => {
     window.print();
@@ -120,14 +122,14 @@ export default function ClinicalReportModal({ result, imageSrc, _imageName, onCl
             <div className={`p-4 rounded-2xl border ${isLight ? 'bg-slate-50 border-slate-200' : 'bg-slate-900/60 border-slate-800'}`}>
               <span className="text-xs font-mono font-bold text-slate-500 uppercase block mb-3">1. Original Radiograph</span>
               <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-black flex items-center justify-center max-h-[260px]">
-                <img src={imageSrc} alt="Original Radiograph" className="max-h-[250px] w-auto object-contain" />
+                <img src={currentImage} alt="Original Radiograph" className="max-h-[250px] w-auto object-contain" />
               </div>
             </div>
 
             <div className={`p-4 rounded-2xl border ${isLight ? 'bg-slate-50 border-slate-200' : 'bg-slate-900/60 border-slate-800'}`}>
-              <span className="text-xs font-mono font-bold text-teal-600 uppercase block mb-3">2. PyTorch Grad-CAM Activation Heatmap</span>
+              <span className="text-xs font-mono font-bold text-teal-600 uppercase block mb-3">2. PyTorch Feature Map / Heatmap View</span>
               <div className="rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-black flex items-center justify-center max-h-[260px]">
-                <img src={result.gradcam_image || imageSrc} alt="Grad-CAM Heatmap" className="max-h-[250px] w-auto object-contain" />
+                <img src={result.gradcam_image || currentImage} alt="Feature Heatmap" className="max-h-[250px] w-auto object-contain" />
               </div>
             </div>
           </div>
